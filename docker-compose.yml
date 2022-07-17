@@ -5,11 +5,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: hybirdcorp/docker-forticlient
+      args:
+        - CERTIFICATE_FILE=file.pfx
+    image: hybirdcorp/docker-forticlient    
     environment:
       - VPNADDR=host:port
       - VPNUSER=me@domain
       - VPNPASS=secret
       - VPNTIMEOUT=${VPNTIMEOUT:-10}
+      - CERTIFICATE=name.pfx
+      - CERTFICATEPASS=secret
     network_mode: "host"
     privileged: true

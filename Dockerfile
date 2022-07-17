@@ -1,13 +1,19 @@
 FROM ubuntu:18.04
 
+ARG CERTIFICATE_FILE
+
 ENV VPNADDR \
     VPNUSER \
-    VPNPASS
+    VPNPASS \
+    CERTIFICATE \
+    CERTIFICATEPASS
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
+  apt-get install -y software-properties-common && \
   apt-get install -y -o APT::Install-Recommends=false -o APT::Install-Suggests=false \
+  curl \
   ca-certificates \
   expect \
   net-tools \
@@ -26,6 +32,9 @@ RUN dpkg -x forticlient-sslvpn_amd64.deb /usr/share/forticlient && rm forticlien
 
 # Run setup
 RUN /usr/share/forticlient/opt/forticlient-sslvpn/64bit/helper/setup.linux.sh 2
+
+# Copy certificate
+COPY ${CERTIFICATE_FILE} /${CERTIFICATE_FILE}
 
 # Copy runfiles
 COPY forticlient /usr/bin/forticlient

@@ -8,6 +8,8 @@ The container uses the forticlientsslvpn_cli linux binary to manage ppp interfac
 
 All of the container traffic is routed through the VPN, so you can in turn route host traffic through the container to access remote subnets.
 
+Before building image you need to place your .pfx file in the same directory as the Dockerfile.
+
 ### Linux
 
 ```bash
@@ -21,7 +23,9 @@ docker run -it --rm \
   -e VPNADDR=host:port \
   -e VPNUSER=me@domain \
   -e VPNPASS=secret \
-  auchandirect/forticlient
+  -e CERTIFICATE=file.pfx \
+  -e CERTIFICATEPASS=secret \
+  hybirdcorp/docker-forticlient
 
 # Add route for you remote subnet (ex. 10.201.0.0/16)
 ip route add 10.201.0.0/16 via 172.20.0.2
@@ -48,7 +52,9 @@ docker run -it --rm \
   -e VPNADDR=host:port \
   -e VPNUSER=me@domain \
   -e VPNPASS=secret \
-  auchandirect/forticlient
+  -e CERTIFICATE=file.pfx \
+  -e CERTIFICATEPASS=secret \
+  hybirdcorp/forticlient
 
 # Add route for you remote subnet (ex. 10.201.0.0/16)
 sudo route add -net 10.201.0.0/16 $(docker-machine ip fortinet)
